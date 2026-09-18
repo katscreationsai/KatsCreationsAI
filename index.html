@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KatsCreationsAI | Freelance Software &amp; AI Development</title>
+  <!-- Google Fonts: Sour Gummy for headings AND fun body text, Quicksand for UI/mono bits -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #ffffff;
+      --surface: #fff2f8;
+      --surface-2: #ffe0ee;
+      --border: #ffc2e0;
+      --text: #3a2233;
+      --text-dim: #8c6b82;
+      --pink: #ff4fa3;
+      --pink-deep: #d43e88;
+      --pink-soft: #ffb0d9;
+      --err: #e0654f;
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      /* Sour Gummy for headings, subheadings, and fun descriptions */
+      --font-head: 'Sour Gummy', 'Arial Rounded MT Bold', cursive, sans-serif;
+      --font-fun: 'Sour Gummy', 'Arial Rounded MT Bold', cursive, sans-serif;
+      /* Quicksand for UI bits, labels, and mono */
+      --font-body: 'Quicksand', system-ui, sans-serif;
+      --font-mono: 'Quicksand', system-ui, sans-serif;
+    }
+
+    /* Fixed brand theme: white + pink always */
+    @media (prefers-color-scheme: light){
+      :root:not([data-theme="light"]){
+        --bg: #ffffff; --surface: #fff2f8; --surface-2: #ffe0ee; --border: #ffc2e0;
+        --text: #3a2233; --text-dim: #8c6b82; --pink: #ff4fa3; --pink-deep: #d43e88;
+      }
+    }
+    :root[data-theme="dark"]{
+      --bg: #ffffff; --surface: #fff2f8; --surface-2: #ffe0ee; --border: #ffc2e0;
+      --text: #3a2233; --text-dim: #8c6b82; --pink: #ff4fa3; --pink-deep: #d43e88;
+    }
+
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+
+    body{
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-fun);
+      font-weight: 500;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a{ color: var(--pink-deep); text-decoration: none; font-weight: 600; }
+    a:hover{ text-decoration: underline; }
+
+    :focus-visible{
+      outline: 2px solid var(--pink);
+      outline-offset: 3px;
+    }
+
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- Header ---------- */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--border);
+    }
+    .nav-row{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+    }
+    .logo{
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+    .logo span{ color: var(--pink); }
+
+    nav.links{ display: flex; gap: 28px; }
+    nav.links a{
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+    }
+    nav.links a:hover{ color: var(--pink-deep); text-decoration: none; }
+
+    .nav-cta{
+      background: var(--pink);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-family: var(--font-body);
+    }
+    .nav-cta:hover{ background: var(--pink-deep); text-decoration: none; }
+
+    .menu-btn{
+      display: none;
+      background: none;
+      border: 2px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    .menu-btn span, .menu-btn::before, .menu-btn::after{
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--pink);
+      margin: 4px 0;
+      border-radius: 2px;
+      content: "";
+    }
+
+    .mobile-menu{
+      display: none;
+      flex-direction: column;
+      padding: 8px 24px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+    }
+    .mobile-menu a{
+      color: var(--text-dim);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.98rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+    }
+    .mobile-menu a:last-child{ border-bottom: none; }
+    .mobile-menu.open{ display: flex; }
+
+    @media (max-width: 780px){
+      nav.links, .nav-cta{ display: none; }
+      .menu-btn{ display: block; }
+    }
+
+    /* ---------- Hero ---------- */
+    .hero{
+      padding: 88px 0 76px;
+      border-bottom: 2px solid var(--border);
+      background:
+        radial-gradient(600px 300px at 85% -10%, rgba(255,79,163,0.14), transparent 70%);
+    }
+    .hero-grid{
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: center;
+    }
+    @media (max-width: 900px){
+      .hero-grid{ grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .eyebrow{
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--pink-deep);
+      margin-bottom: 18px;
+    }
+
+    .subheader{
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: var(--pink-deep);
+      margin: 0 0 20px;
+    }
+
+    h1{
+      font-family: var(--font-head);
+      font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+      line-height: 1.1;
+      margin: 0 0 22px;
+      font-weight: 700;
+      max-width: 20ch;
+      color: var(--text);
+    }
+
+    .hero p.lead{
+      font-family: var(--font-fun);
+      font-size: 1.08rem;
+      color: var(--text-dim);
+      max-width: 46ch;
+      margin: 0 0 32px;
+      font-weight: 500;
+    }
+
+    .hero-ctas{ display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-primary{
+      background: var(--pink);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 13px 28px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.98rem;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+    .btn-primary:hover{ background: var(--pink-deep); text-decoration: none; }
+
+    .btn-ghost{
+      background: transparent;
+      color: var(--text);
+      padding: 13px 28px;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      font-size: 0.98rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      cursor: pointer;
+    }
+    .btn-ghost:hover{ border-color: var(--pink); color: var(--pink-deep); text-decoration: none; }
+
+    /* terminal mock */
+    .terminal{
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+    }
+    .terminal-bar{
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border-bottom: 2px solid var(--border);
+    }
+    .dot{ width: 11px; height: 11px; border-radius: 50%; }
+    .dot.r{ background: var(--pink-deep); }
+    .dot.y{ background: var(--pink); }
+    .dot.g{ background: var(--pink-soft); }
+    .terminal-title{
+      margin-left: 8px;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .terminal-body{ padding: 18px 16px; color: var(--text-dim); }
+    .terminal-body .prompt{ color: var(--pink-deep); font-weight: 700; }
+    .terminal-body .out{ color: var(--text); }
+    .caret{
+      display: inline-block;
+      width: 7px;
+      height: 15px;
+      background: var(--pink);
+      vertical-align: -2px;
+      animation: blink 1.1s steps(1) infinite;
+    }
+    @keyframes blink{ 50%{ opacity: 0; } }
+
+    /* ---------- Section shell ---------- */
+    section{ padding: 56px 0; border-bottom: 2px solid var(--border); }
+    section:last-of-type{ border-bottom: none; }
+    @media (max-width: 780px){
+      section{ padding: 40px 0; }
+      .hero{ padding: 56px 0 48px; }
+    }
+
+    .section-head{ margin-bottom: 48px; max-width: 56ch; }
+    .kicker{
+      font-family: var(--font-body);
+      font-weight: 700;
+      color: var(--pink-deep);
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+    }
+    h2{
+      font-family: var(--font-head);
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      font-weight: 700;
+      margin: 0 0 14px;
+      color: var(--text);
+    }
+    .section-head p{ 
+      color: var(--text-dim); 
+      font-size: 1.02rem; 
+      margin: 0; 
+      font-family: var(--font-fun);
+    }
+
+    /* ---------- Services ---------- */
+    .service-list{ display: flex; flex-direction: column; }
+    .service{
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-top: 2px solid var(--border);
+      position: relative;
+    }
+    .service::before{
+      content: "";
+      position: absolute;
+      left: -24px;
+      top: 28px;
+      bottom: 28px;
+      width: 4px;
+      border-radius: 4px;
+      background: transparent;
+      transition: background 0.2s ease;
+    }
+    .service:hover::before{ background: var(--pink); }
+    .service:first-child{ border-top: none; }
+    .service-icon{
+      width: 48px; height: 48px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--pink-deep);
+      background: var(--surface);
+    }
+    .service h3{
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      margin: 0 0 8px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .service p{ 
+      color: var(--text-dim); 
+      margin: 0; 
+      max-width: 56ch;
+      font-family: var(--font-fun);
+      font-weight: 500;
+    }
+
+    /* ---------- Portfolio (window plates) ---------- */
+    .work-grid{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+    @media (max-width: 720px){ .work-grid{ grid-template-columns: 1fr; } }
+
+    .plate{
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .plate-bar{
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 12px;
+      background: var(--surface-2);
+      border-bottom: 2px solid var(--border);
+    }
+    .plate-bar .name{
+      margin-left: 6px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+    .plate-body{ padding: 22px 20px 24px; }
+    .plate-body h3{
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .plate-body p{ 
+      color: var(--text-dim); 
+      margin: 0 0 14px; 
+      font-size: 0.96rem;
+      font-family: var(--font-fun);
+    }
+    .plate-body a{ 
+      font-family: var(--font-mono); 
+      font-size: 0.85rem; 
+    }
+
+    .plate-note{
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.76rem;
+      color: var(--pink-deep);
+      background: var(--surface-2);
+      border: 1px solid var(--pink-soft);
+      border-radius: 999px;
+      padding: 4px 12px;
+    }
+
+    .plate-footer{
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .work-note{
+      margin-top: 28px;
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      font-family: var(--font-fun);
+      font-weight: 600;
+    }
+
+    /* ---------- Process ---------- */
+    .process-list{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    @media (max-width: 900px){ .process-list{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px){ .process-list{ grid-template-columns: 1fr; } }
+
+    .step{ border-top: 3px solid var(--border); padding-top: 18px; }
+    .step .num{
+      font-family: var(--font-mono);
+      color: var(--pink-deep);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .step h3{
+      font-family: var(--font-head);
+      font-size: 1.08rem;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .step p{ 
+      color: var(--text-dim); 
+      margin: 0; 
+      font-size: 0.94rem;
+      font-family: var(--font-fun);
+    }
+
+    /* ---------- About ---------- */
+    .about{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    @media (max-width: 800px){ .about{ grid-template-columns: 1fr; gap: 28px; } }
+    .about p{ 
+      color: var(--text-dim); 
+      font-size: 1.02rem;
+      font-family: var(--font-fun);
+    }
+    .about p strong{ color: var(--text); }
+    .chip-row{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .chip{
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--pink-deep);
+      border: 2px solid var(--pink-soft);
+      border-radius: 999px;
+      padding: 6px 16px;
+    }
+
+    /* ---------- Contact ---------- */
+    .contact-grid{
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 48px;
+    }
+    @media (max-width: 860px){ .contact-grid{ grid-template-columns: 1fr; gap: 32px; } }
+
+    .contact-info p{ 
+      color: var(--text-dim);
+      font-family: var(--font-fun);
+    }
+    .contact-info a.email{
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    form{
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .field{ display: flex; flex-direction: column; gap: 7px; }
+    .field label{
+      font-size: 0.86rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+    .field input, .field select, .field textarea{
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 13px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.98rem;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus{
+      outline: 2px solid var(--pink);
+      outline-offset: 1px;
+      border-color: var(--pink);
+    }
+    .field textarea{ resize: vertical; min-height: 110px; }
+    .row-2{ display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 520px){ .row-2{ grid-template-columns: 1fr; } }
+
+    .form-note{
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin: -4px 0 0;
+      font-family: var(--font-fun);
+    }
+    .form-status{
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      min-height: 1.2em;
+    }
+    .form-status.ok{ color: var(--pink-deep); }
+    .form-status.err{ color: var(--err); }
+
+    /* ---------- Footer ---------- */
+    footer{ padding: 40px 0 60px; }
+    .footer-row{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-row p{ 
+      color: var(--text-dim); 
+      font-size: 0.88rem; 
+      margin: 0;
+      font-family: var(--font-fun);
+    }
+    .footer-links{ display: flex; gap: 20px; }
+    .footer-links a{ 
+      color: var(--text-dim); 
+      font-size: 0.88rem; 
+      font-weight: 600;
+      font-family: var(--font-body);
+    }
+    .footer-links a:hover{ color: var(--pink-deep); }
+  </style>
+</head>
+<body data-theme="dark">
+
+<header>
+  <div class="nav-row">
+    <a href="#top" class="logo">Kats<span>Creations</span>AI</a>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+    </nav>
+    <a href="#contact" class="nav-cta">Start a project</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services">Services</a>
+    <a href="#work">Work</a>
+    <a href="#process">Process</a>
+    <a href="#about">About</a>
+    <a href="#contact">Start a project</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero" style="border-bottom:2px solid var(--border);">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Software and AI tools</h1>
+        <p class="subheader">freelance software &amp; AI development</p>
+        <p class="lead">I design and build web apps, Python tools, and AI systems for people who need something real made, not a template with your logo on it.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView()">Start a project</button>
+          <button class="btn-ghost" onclick="document.getElementById('work').scrollIntoView()">See what I've built</button>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="terminal-title">~/katscreationsai</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">$</span> whoami</div>
+          <div class="out">self-taught engineer, front end and back end</div>
+          <div style="margin-top:14px;"><span class="prompt">$</span> ls services/</div>
+          <div class="out">web-apps  python-tools  ai-ml  servers</div>
+          <div style="margin-top:14px;"><span class="prompt">$</span> <span class="caret"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">services</p>
+        <h2>What I take on</h2>
+        <p>Four areas I actually build in, not a list padded out to look bigger.</p>
+      </div>
+      <div class="service-list">
+
+        <div class="service">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 8h18"/><circle cx="6" cy="6" r="0.6" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div>
+            <h3>Web apps &amp; websites</h3>
+            <p>From a marketing site to a full interactive app. I treat the front end with the same care as the logic underneath it, so it looks intentional and works the way people expect.</p>
+          </div>
+        </div>
+
+        <div class="service">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l-3 3 3 3"/><path d="M18 9l3 3-3 3"/><path d="M13 5l-2 14"/></svg>
+          </div>
+          <div>
+            <h3>Python applications</h3>
+            <p>Desktop tools, automation, and utilities that solve a specific problem you actually have. Built to run reliably, not just to demo well once.</p>
+          </div>
+        </div>
+
+        <div class="service">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="17" r="2"/><path d="M12 7v5m0 0l-5.5 4M12 12l5.5 4"/></svg>
+          </div>
+          <div>
+            <h3>AI &amp; machine learning tools</h3>
+            <p>Model integration, generative systems, GANs, and transformer-based tools.</p>
+          </div>
+        </div>
+
+        <div class="service">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="6" rx="2"/><rect x="4" y="10" width="16" height="6" rx="2"/><rect x="4" y="17" width="16" height="4" rx="2"/><circle cx="7" cy="6" r="0.5" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div>
+            <h3>Servers &amp; infrastructure</h3>
+            <p>Setup, deployment, and upkeep for whatever the app is running on, so the thing I build for you keeps working after launch day.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">work</p>
+        <h2>Things I've shipped on my own</h2>
+        <p>Free, standalone tools I built and released myself, no account walls, no upsells.</p>
+      </div>
+      <div class="work-grid">
+
+        <div class="plate">
+          <div class="plate-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="name">voltage.exe</span></div>
+          <div class="plate-body">
+            <h3>VOLTAGE</h3>
+            <p>A free online drum machine, built to be fast and fun to program beats on straight from the browser.</p>
+            <div class="plate-footer">
+              <a href="https://katscreationsai.github.io/VOLTAGE/" target="_blank" rel="noopener">Try it live</a>
+              <span class="plate-note">Mobile friendly</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="plate">
+          <div class="plate-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="name">capture-studio.exe</span></div>
+          <div class="plate-body">
+            <h3>Capture Studio</h3>
+            <p>A free screen recorder and screenshot tool. No account needed, just open it and capture what you need.</p>
+            <div class="plate-footer">
+              <a href="https://katscreationsai.github.io/Capture-Studio/" target="_blank" rel="noopener">Try it live</a>
+              <span class="plate-note">Desktop only</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="plate">
+          <div class="plate-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="name">obscura-98.exe</span></div>
+          <div class="plate-body">
+            <h3>Obscura-98</h3>
+            <p>A 98 themed photo editor for censoring and marking up images, with text, stickers, and censor blocks that stack freely in any order.</p>
+            <div class="plate-footer">
+              <a href="https://katscreationsai.github.io/Obscura-98/" target="_blank" rel="noopener">Try it live</a>
+              <span class="plate-note">Desktop only</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="plate">
+          <div class="plate-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="name">clipboard-saver.py</span></div>
+          <div class="plate-body">
+            <h3>Screenshot Solution</h3>
+            <p>A Python clipboard saver that automatically drops any image you copy into a dedicated Screenshots folder.</p>
+            <a href="https://github.com/katscreationsai" target="_blank" rel="noopener">View on GitHub</a>
+          </div>
+        </div>
+
+      </div>
+      <p class="work-note">github.com/katscreationsai</p>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">process</p>
+        <h2>How a project actually runs</h2>
+        <p>Four stages, start to finish, so you know what's happening at every point.</p>
+      </div>
+      <div class="process-list">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>Discovery call</h3>
+          <p>We talk through what you're trying to build and why, so the scope fits the actual problem.</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>Scope &amp; plan</h3>
+          <p>You get a clear breakdown of what's being built, in what order, before any work starts.</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>Build</h3>
+          <p>I build in stages and show progress along the way, not one big reveal at the end.</p>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <h3>Launch &amp; support</h3>
+          <p>Once it's live, I stay available to fix issues and help it grow past the first version.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="about">
+        <div>
+          <p class="kicker">about</p>
+          <h2>Who's building this</h2>
+        </div>
+        <div>
+          <p>I'm Katt, the person behind KatsCreationsAI. I'm a self-taught software engineer, and I've spent the last two years building this business up from nothing into something I trust to hand to clients.</p>
+          <p>I'm autistic with ADHD, and honestly, that's part of why I build the way I do: I get deep into the details other people skip past, and I don't ship something until it actually feels finished, front end included.</p>
+          <div class="chip-row">
+            <span class="chip">python</span>
+            <span class="chip">javascript</span>
+            <span class="chip">ai / ml</span>
+            <span class="chip">gans</span>
+            <span class="chip">transformers</span>
+            <span class="chip">servers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-info">
+        <p class="kicker">contact</p>
+        <h2>Tell me what you're building</h2>
+        <p>Fill this out with as much detail as you have. It opens straight in your email client, addressed to me, nothing gets sent anywhere else.</p>
+        <a class="email" href="mailto:KatsCreationsAI@gmail.com">KatsCreationsAI@gmail.com</a>
+      </div>
+
+      <form id="contactForm">
+        <div class="row-2">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="projectType">Project type</label>
+          <select id="projectType" name="projectType">
+            <option value="Web app or website">Web app or website</option>
+            <option value="Python application">Python application</option>
+            <option value="AI or machine learning tool">AI or machine learning tool</option>
+            <option value="Server or infrastructure">Server or infrastructure</option>
+            <option value="Something else">Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Project details</label>
+          <textarea id="message" name="message" required placeholder="What are you trying to build, and what does done look like?"></textarea>
+        </div>
+        <p class="form-note">Submitting opens a pre-filled email in your default mail app so you can review it before sending.</p>
+        <button type="submit" class="btn-primary">Send project details</button>
+        <p class="form-status" id="formStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <p>KatsCreationsAI, freelance software and AI development.</p>
+    <div class="footer-links">
+      <a href="https://github.com/katscreationsai" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:KatsCreationsAI@gmail.com">Email</a>
+    </div>
+    <p id="year"></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var menuBtn = document.getElementById('menuBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', function(){
+      var isOpen = mobileMenu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(){
+        mobileMenu.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    var yearEl = document.getElementById('year');
+    if (yearEl) { yearEl.textContent = String(new Date().getFullYear()); }
+
+    var form = document.getElementById('contactForm');
+    var status = document.getElementById('formStatus');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      var name = document.getElementById('name').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var projectType = document.getElementById('projectType').value;
+      var message = document.getElementById('message').value.trim();
+
+      if (!name || !email || !message) {
+        status.textContent = 'Please fill in your name, email, and project details.';
+        status.className = 'form-status err';
+        return;
+      }
+
+      var subject = 'New project inquiry: ' + projectType;
+      var body =
+        'Name: ' + name + '\n' +
+        'Email: ' + email + '\n' +
+        'Project type: ' + projectType + '\n\n' +
+        'Project details:\n' + message;
+
+      var mailto = 'mailto:KatsCreationsAI@gmail.com' +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+
+      window.location.href = mailto;
+
+      status.textContent = 'Opening your email app now.';
+      status.className = 'form-status ok';
+    });
+  })();
+</script>
+
+</body>
+</html>
