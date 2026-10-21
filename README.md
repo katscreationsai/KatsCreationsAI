@@ -1,3 +1,3 @@
-## Hi there 👋
+Heyy, I'm Katt and I am the owner of KatsCreationsAI. 
 
-I build AI, AI tools, automation tools, fun games, web apps, and other weird stuff. :3 
+I build software, games, websites, servers, AI, AI/ML tools, automation tools, and other cool shit. <3 
